@@ -23,10 +23,10 @@ def send_line_message():
     url = 'https://api.line.me/v2/bot/message/push'
     headers = {
         'Content-Type': 'application/json',
-        'Authorization': f'Bearer {line_access_token}'
+        'Authorization': f'Bearer {LINE_ACCESS_TOKEN}'
     }
     payload = {
-        'to': line_user_id,
+        'to': LINE_USER_ID,
         'messages': [
             {
                 'type': 'text',
