@@ -1,84 +1,189 @@
-<!-- ส่วนแสดงผลและแก้ไขการแต่งกายประจำวัน -->
-<div class="outfit-section" style="margin-top: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 8px;">
-  <h3>👕 จัดการการแต่งกายประจำสัปดาห์</h3>
-  
-  <div style="display: grid; gap: 10px; max-width: 400px;">
-    <label>วันจันทร์: <input type="text" id="outfit-Monday" value="ชุดนักเรียน"></label>
-    <label>วันอังคาร: <input type="text" id="outfit-Tuesday" value="ชุดนักเรียน"></label>
-    <label>วันพุธ: <input type="text" id="outfit-Wednesday" value="ชุดพละ"></label>
-    <label>วันพฤหัสบดี: <input type="text" id="outfit-Thursday" value="ชุดลูกเสือ"></label>
-    <label>วันศุกร์: <input type="text" id="outfit-Friday" value="ชุดผ้าไทย"></label>
-    <label>วันเสาร์: <input type="text" id="outfit-Saturday" value="วันหยุด ไม่ต้องแต่งชุดนักเรียน"></label>
-    <label>วันอาทิตย์: <input type="text" id="outfit-Sunday" value="วันหยุด ไม่ต้องแต่งชุดนักเรียน"></label>
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>จัดการการแต่งกายประจำสัปดาห์</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Sarabun', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    body {
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 20px 15px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+    .card {
+      background: #ffffff;
+      width: 100%;
+      max-width: 500px;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 22px;
+      color: #333333;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    label {
+      display: block;
+      font-size: 16px;
+      font-weight: 600;
+      color: #444444;
+      margin-bottom: 6px;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 12px 14px;
+      font-size: 16px;
+      border: 1.5px solid #cccccc;
+      border-radius: 10px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input[type="text"]:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+    }
+    .btn-save {
+      width: 100%;
+      padding: 14px;
+      margin-top: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #ffffff;
+      background-color: #28a745;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(40, 167, 69, 0.2);
+      transition: background-color 0.2s, transform 0.1s;
+    }
+    .btn-save:active {
+      transform: scale(0.98);
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>👕 จัดการการแต่งกายประจำสัปดาห์</h2>
+    
+    <div class="form-group">
+      <label for="outfit-Monday">วันจันทร์</label>
+      <input type="text" id="outfit-Monday" value="ชุดนักเรียน">
+    </div>
+
+    <div class="form-group">
+      <label for="outfit-Tuesday">วันอังคาร</label>
+      <input type="text" id="outfit-Tuesday" value="ชุดนักเรียน">
+    </div>
+
+    <div class="form-group">
+      <label for="outfit-Wednesday">วันพุธ</label>
+      <input type="text" id="outfit-Wednesday" value="ชุดพละ">
+    </div>
+
+    <div class="form-group">
+      <label for="outfit-Thursday">วันพฤหัสบดี</label>
+      <input type="text" id="outfit-Thursday" value="ชุดลูกเสือ">
+    </div>
+
+    <div class="form-group">
+      <label for="outfit-Friday">วันศุกร์</label>
+      <input type="text" id="outfit-Friday" value="ชุดผ้าไทย">
+    </div>
+
+    <div class="form-group">
+      <label for="outfit-Saturday">วันเสาร์</label>
+      <input type="text" id="outfit-Saturday" value="วันหยุด ไม่ต้องแต่งชุดนักเรียน">
+    </div>
+
+    <div class="form-group">
+      <label for="outfit-Sunday">วันอาทิตย์</label>
+      <input type="text" id="outfit-Sunday" value="วันหยุด ไม่ต้องแต่งชุดนักเรียน">
+    </div>
+
+    <button class="btn-save" onclick="saveOutfitConfig()">💾 บันทึกการแต่งกายลง outfit.json</button>
   </div>
 
-  <button onclick="saveOutfitConfig()" style="margin-top: 15px; padding: 8px 16px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">
-    💾 บันทึกชุดแต่งกายลง outfit.json
-  </button>
-</div>
-
-<script>
-// ฟังก์ชันสร้าง Object โครงสร้าง outfit.json
-function getOutfitDataFromInputs() {
-  return {
-    schedule: {
-      Monday: document.getElementById('outfit-Monday').value,
-      Tuesday: document.getElementById('outfit-Tuesday').value,
-      Wednesday: document.getElementById('outfit-Wednesday').value,
-      Thursday: document.getElementById('outfit-Thursday').value,
-      Friday: document.getElementById('outfit-Friday').value,
-      Saturday: document.getElementById('outfit-Saturday').value,
-      Sunday: document.getElementById('outfit-Sunday').value
+  <script>
+    function getOutfitDataFromInputs() {
+      return {
+        schedule: {
+          Monday: document.getElementById('outfit-Monday').value,
+          Tuesday: document.getElementById('outfit-Tuesday').value,
+          Wednesday: document.getElementById('outfit-Wednesday').value,
+          Thursday: document.getElementById('outfit-Thursday').value,
+          Friday: document.getElementById('outfit-Friday').value,
+          Saturday: document.getElementById('outfit-Saturday').value,
+          Sunday: document.getElementById('outfit-Sunday').value
+        }
+      };
     }
-  };
-}
 
-// ฟังก์ชันบันทึกข้อมูลไปยัง outfit.json บน GitHub ผ่าน API
-async function saveOutfitConfig() {
-  const token = localStorage.getItem('github_token'); // หรือตำแหน่งที่คุณเก็บ Access Token ไว้
-  if (!token) {
-    alert('กรุณาใส่ GitHub Access Token ก่อนบันทึกครับ');
-    return;
-  }
+    async function saveOutfitConfig() {
+      const token = localStorage.getItem('github_token') || prompt('กรุณาใส่ Personal Access Token ของ GitHub:');
+      if (!token) {
+        alert('จำเป็นต้องใช้ Token ในการอัปเดตไฟล์ครับ');
+        return;
+      }
+      localStorage.setItem('github_token', token);
 
-  const repo = 'varaleebbjaa247-cmd/daily-School-Uniform';
-  const path = 'outfit.json';
-  const url = `https://api.github.com/repos/${repo}/contents/${path}`;
+      const repo = 'varaleebbjaa247-cmd/daily-School-Uniform';
+      const path = 'outfit.json';
+      const url = `https://api.github.com/repos/${repo}/contents/${path}`;
 
-  try {
-    // 1. ดึง sha ของไฟล์เดิมก่อน
-    const getRes = await fetch(url, {
-      headers: { 'Authorization': `token ${token}` }
-    });
-    const fileData = await getRes.json();
-    const sha = fileData.sha;
+      try {
+        const getRes = await fetch(url, {
+          headers: { 'Authorization': `token ${token}` }
+        });
+        const fileData = await getRes.json();
+        const sha = fileData.sha;
 
-    // 2. แปลง JSON ใหม่เป็น Base64
-    const newContent = JSON.stringify(getOutfitDataFromInputs(), null, 2);
-    const encodedContent = btoa(unescape(encodeURIComponent(newContent)));
+        const newContent = JSON.stringify(getOutfitDataFromInputs(), null, 2);
+        const encodedContent = btoa(unescape(encodeURIComponent(newContent)));
 
-    // 3. ส่งคำขอ PUT เพื่ออัปเดตไฟล์ outfit.json
-    const putRes = await fetch(url, {
-      method: 'PUT',
-      headers: {
-        'Authorization': `token ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        message: 'Update outfit.json via web UI',
-        content: encodedContent,
-        sha: sha
-      })
-    });
+        const putRes = await fetch(url, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `token ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            message: 'Update outfit.json via Web UI',
+            content: encodedContent,
+            sha: sha
+          })
+        });
 
-    if (putRes.ok) {
-      alert('บันทึกชุดแต่งกายเรียบร้อยแล้วครับ!');
-    } else {
-      alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+        if (putRes.ok) {
+          alert('บันทึกชุดแต่งกายเรียบร้อยแล้วครับ!');
+        } else {
+          alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('ไม่สามารถเชื่อมต่อกับ GitHub API ได้');
+      }
     }
-  } catch (err) {
-    console.error(err);
-    alert('ไม่สามารถเชื่อมต่อกับ GitHub API ได้');
-  }
-}
-</script>
+  </script>
+
+</body>
+</html>
