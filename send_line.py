@@ -3,14 +3,16 @@ import json
 import requests
 
 def send_line_message():
-    line_access_token = os.environ.get('zBuaP2af8ltY8EJ2TE2HX+XcOal55VDiYfiQvN+QB5u9LndkwLFpDonKHApqZbI+QRlJwZXrNgtv9Lid89O1PMZfwDO4OLd4Awl0jlhSi+vZIlRPigOfMAAriuP3nOULN7XsuOKCWKA8R+AvHJBYpgdB04t89/1O/w1cDnyilFU=')
-    line_user_id = os.environ.get('U980ed1b118020706c9fb1fd09136d2d2') # ส่งตรงเข้า User ID หรือ Group ID ก็ได้
+    # 1. ดึงค่าจาก Secrets (ต้องใช้ os.environ.get และชื่อตัวพิมพ์ใหญ่)
+    LINE_ACCESS_TOKEN = os.environ.get('LINE_ACCESS_TOKEN')
+    LINE_USER_ID = os.environ.get('LINE_USER_ID')
 
-    if not line_access_token or not line_user_id:
+    # ตรวจสอบว่าดึงค่าสำเร็จหรือไม่
+    if not LINE_ACCESS_TOKEN or not LINE_USER_ID:
         print("Error: Missing LINE_ACCESS_TOKEN or LINE_USER_ID")
         return
 
-    # อ่านข้อความจากไฟล์ outfit.json
+    # 2. อ่านข้อความจากไฟล์ outfit.json
     try:
         with open('outfit.json', 'r', encoding='utf-8') as f:
             data = json.load(f)
@@ -19,7 +21,7 @@ def send_line_message():
         print(f"Error reading outfit.json: {e}")
         msg_text = "อย่าลืมตรวจสอบการแต่งกายไปโรงเรียนวันนี้ครับ!"
 
-    # ส่งข้อความผ่าน Messaging API Push Message
+    # 3. ส่งข้อความผ่าน Messaging API Push Message
     url = 'https://api.line.me/v2/bot/message/push'
     headers = {
         'Content-Type': 'application/json',
