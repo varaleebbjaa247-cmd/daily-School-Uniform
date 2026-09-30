@@ -39,8 +39,14 @@ def send_line_message():
     except Exception as e:
         print(f"Error reading outfit.json: {e}")
 
-    # 4. สร้างข้อความแจ้งเตือน
-    msg_text = f"👕 แจ้งเตือนการแต่งกายประจำวัน\n({today_th} / {day_name.upper()}):\n\n• วันนี้แต่งกาย: {outfit_today}"
+     # 4. สร้างข้อความแจ้งเตือน
+    web_url = "https://varaleebbjaa247-cmd.github.io/daily-School-Uniform/"
+    msg_text = (
+        f"👕 แจ้งเตือนการแต่งกายประจำวัน\n"
+        f"({today_th} / {day_name.upper()}):\n\n"
+        f"• วันนี้แต่งกาย: {outfit_today}\n\n"
+        f"✏️ แก้ไขตารางแต่งกาย:\n{web_url}"
+    )
 
     # 5. ส่งข้อความผ่าน Messaging API
     url = 'https://api.line.me/v2/bot/message/push'
