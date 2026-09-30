@@ -4,8 +4,8 @@ import requests
 
 def send_line_message():
     # 1. ดึงค่าจาก Secrets (ต้องใช้ os.environ.get และชื่อตัวพิมพ์ใหญ่)
-    LINE_ACCESS_TOKEN = os.environ.get('zBuaP2af8ltY8EJ2TE2HX+XcOal55VDiYfiQvN+QB5u9LndkwLFpDonKHApqZbI+QRlJwZXrNgtv9Lid89O1PMZfwDO4OLd4Awl0jlhSi+vZIlRPigOfMAAriuP3nOULN7XsuOKCWKA8R+AvHJBYpgdB04t89/1O/w1cDnyilFU=')
-    LINE_USER_ID = os.environ.get('U980ed1b118020706c9fb1fd09136d2d2')
+    LINE_ACCESS_TOKEN = os.environ.get('LINE_ACCESS_TOKEN')
+    LINE_USER_ID = os.environ.get('LINE_USER_ID')
 
     # ตรวจสอบว่าดึงค่าสำเร็จหรือไม่
     if not LINE_ACCESS_TOKEN or not LINE_USER_ID:
