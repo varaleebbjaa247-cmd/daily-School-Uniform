@@ -1,108 +1,84 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ระบบจัดการข้อความเตือนแต่งตัวไปโรงเรียน</title>
-  <style>
-    body { font-family: 'Tahoma', sans-serif; max-width: 600px; margin: 30px auto; padding: 20px; background-color: #f4f6f9; }
-    .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-    h2 { color: #06c755; margin-top: 0; }
-    label { font-weight: bold; display: block; margin-top: 15px; margin-bottom: 5px; }
-    input, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-    textarea { height: 120px; resize: vertical; }
-    button { background-color: #06c755; color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; font-size: 16px; margin-top: 20px; width: 100%; }
-    button:hover { background-color: #05b34c; }
-    #status { margin-top: 15px; font-weight: bold; text-align: center; }
-  </style>
-</head>
-<body>
-
-<div class="card">
-  <h2>👔 จัดการข้อความแจ้งเตือน LINE</h2>
+<!-- ส่วนแสดงผลและแก้ไขการแต่งกายประจำวัน -->
+<div class="outfit-section" style="margin-top: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 8px;">
+  <h3>👕 จัดการการแต่งกายประจำสัปดาห์</h3>
   
-  <label for="token">GitHub Personal Access Token:</label>
-  <input type="password" id="token" placeholder="ghp_xxxxxxxxxxxx">
+  <div style="display: grid; gap: 10px; max-width: 400px;">
+    <label>วันจันทร์: <input type="text" id="outfit-Monday" value="ชุดนักเรียน"></label>
+    <label>วันอังคาร: <input type="text" id="outfit-Tuesday" value="ชุดนักเรียน"></label>
+    <label>วันพุธ: <input type="text" id="outfit-Wednesday" value="ชุดพละ"></label>
+    <label>วันพฤหัสบดี: <input type="text" id="outfit-Thursday" value="ชุดลูกเสือ"></label>
+    <label>วันศุกร์: <input type="text" id="outfit-Friday" value="ชุดผ้าไทย"></label>
+    <label>วันเสาร์: <input type="text" id="outfit-Saturday" value="วันหยุด ไม่ต้องแต่งชุดนักเรียน"></label>
+    <label>วันอาทิตย์: <input type="text" id="outfit-Sunday" value="วันหยุด ไม่ต้องแต่งชุดนักเรียน"></label>
+  </div>
 
-  <label for="message">ข้อความแจ้งเตือนประจำวัน:</label>
-  <textarea id="message" placeholder="กำลังโหลดข้อมูล..."></textarea>
-
-  <button onclick="saveMessage()">💾 บันทึกข้อมูล</button>
-  <div id="status"></div>
+  <button onclick="saveOutfitConfig()" style="margin-top: 15px; padding: 8px 16px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer;">
+    💾 บันทึกชุดแต่งกายลง outfit.json
+  </button>
 </div>
 
 <script>
-  // **กรอกข้อมูล Repository ของคุณตรงนี้**
-  const OWNER = 'varaleebbjaa247';
-  const REPO = 'daily-School-Uniform';
-  const PATH = 'outfit.json';
-
-  let currentSha = '';
-
-  // โหลดข้อมูลปัจจุบันจาก Repository
-  async function loadMessage() {
-    try {
-      const res = await fetch(`https://raw.githubusercontent.com/${OWNER}/${REPO}/main/${PATH}?t=${Date.now()}`);
-      const data = await res.json();
-      document.getElementById('message').value = data.message;
-    } catch (err) {
-      document.getElementById('status').innerText = '❌ โหลดข้อมูลไม่สำเร็จ';
-      document.getElementById('status').style.color = 'red';
+// ฟังก์ชันสร้าง Object โครงสร้าง outfit.json
+function getOutfitDataFromInputs() {
+  return {
+    schedule: {
+      Monday: document.getElementById('outfit-Monday').value,
+      Tuesday: document.getElementById('outfit-Tuesday').value,
+      Wednesday: document.getElementById('outfit-Wednesday').value,
+      Thursday: document.getElementById('outfit-Thursday').value,
+      Friday: document.getElementById('outfit-Friday').value,
+      Saturday: document.getElementById('outfit-Saturday').value,
+      Sunday: document.getElementById('outfit-Sunday').value
     }
+  };
+}
+
+// ฟังก์ชันบันทึกข้อมูลไปยัง outfit.json บน GitHub ผ่าน API
+async function saveOutfitConfig() {
+  const token = localStorage.getItem('github_token'); // หรือตำแหน่งที่คุณเก็บ Access Token ไว้
+  if (!token) {
+    alert('กรุณาใส่ GitHub Access Token ก่อนบันทึกครับ');
+    return;
   }
 
-  // บันทึกข้อมูลกลับไปยัง GitHub
-  async function saveMessage() {
-    const token = document.getElementById('token').value.trim();
-    const messageText = document.getElementById('message').value;
-    const statusDiv = document.getElementById('status');
+  const repo = 'varaleebbjaa247-cmd/daily-School-Uniform';
+  const path = 'outfit.json';
+  const url = `https://api.github.com/repos/${repo}/contents/${path}`;
 
-    if (!token) {
-      alert('กรุณากรอก GitHub Token ก่อนทำการบันทึก');
-      return;
+  try {
+    // 1. ดึง sha ของไฟล์เดิมก่อน
+    const getRes = await fetch(url, {
+      headers: { 'Authorization': `token ${token}` }
+    });
+    const fileData = await getRes.json();
+    const sha = fileData.sha;
+
+    // 2. แปลง JSON ใหม่เป็น Base64
+    const newContent = JSON.stringify(getOutfitDataFromInputs(), null, 2);
+    const encodedContent = btoa(unescape(encodeURIComponent(newContent)));
+
+    // 3. ส่งคำขอ PUT เพื่ออัปเดตไฟล์ outfit.json
+    const putRes = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `token ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message: 'Update outfit.json via web UI',
+        content: encodedContent,
+        sha: sha
+      })
+    });
+
+    if (putRes.ok) {
+      alert('บันทึกชุดแต่งกายเรียบร้อยแล้วครับ!');
+    } else {
+      alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
     }
-
-    statusDiv.innerText = '⏳ กำลังบันทึกข้อมูล...';
-    statusDiv.style.color = 'orange';
-
-    try {
-      // ดึง SHA ของไฟล์เดิมก่อนอัปเดต
-      const getFile = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`, {
-        headers: { 'Authorization': `token ${token}` }
-      });
-      const fileData = await getFile.json();
-      currentSha = fileData.sha;
-
-      // ส่งคำขอ Update
-      const contentEncoded = btoa(unescape(encodeURIComponent(JSON.stringify({ message: messageText }, null, 2))));
-      
-      const response = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${PATH}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `token ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          message: 'Update notification message via Web Admin',
-          content: contentEncoded,
-          sha: currentSha
-        })
-      });
-
-      if (response.ok) {
-        statusDiv.innerText = '✅ บันทึกสำเร็จเรียบร้อย!';
-        statusDiv.style.color = 'green';
-      } else {
-        throw new Error('Save failed');
-      }
-    } catch (err) {
-      statusDiv.innerText = '❌ เกิดข้อผิดพลาดในการบันทึก Check Token หรือ Permissions';
-      statusDiv.style.color = 'red';
-    }
+  } catch (err) {
+    console.error(err);
+    alert('ไม่สามารถเชื่อมต่อกับ GitHub API ได้');
   }
-
-  loadMessage();
+}
 </script>
-
-</body>
-</html>
