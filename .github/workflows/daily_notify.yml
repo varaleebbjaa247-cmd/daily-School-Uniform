@@ -3,7 +3,7 @@ name: Daily School Outfit LINE Notification
 on:
   schedule:
     # 22:30 UTC = 05:30 น. ไทย (UTC+7)
-    - cron: '30 22 * * *'
+    - cron: '21 21 * * *'
   workflow_dispatch: # ปุ่มสำหรับกดทดสอบส่งทันทีบน GitHub
 
 jobs:
