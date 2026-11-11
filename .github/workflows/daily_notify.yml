@@ -1,6 +1,6 @@
 name: Daily School Outfit LINE Notification
 
-on:
+#on:
   schedule:
     # 22:30 UTC = 05:30 น. ไทย (UTC+7)
     - cron: '21 21 * * *'
